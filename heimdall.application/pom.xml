@@ -10,6 +10,21 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>heimdall.application</artifactId>
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://github.com/MediaIQ/heimdall/blob/master/LICENSE</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>MIQ SDETs</name>
+            <email>qa-dev@miqdigital.com</email>
+            <organization>MIQ Digital</organization>
+            <organizationUrl>https://github.com/MediaIQ/heimdall</organizationUrl>
+        </developer>
+    </developers>
 
     <properties>
         <gson.version>2.8.0</gson.version>
@@ -22,8 +37,22 @@
         <cucumber-java.version>4.2.0</cucumber-java.version>
         <cucumber-junit.version>4.2.0</cucumber-junit.version>
         <cucumber-core.version>4.2.0</cucumber-core.version>
+        <maven-source-plugin>3.0.1</maven-source-plugin>
+        <maven-release-plugin>2.5.3</maven-release-plugin>
+        <maven-scm-provider-gitexe.version>1.9.5</maven-scm-provider-gitexe.version>
     </properties>
 
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/
+            </url>
+        </repository>
+    </distributionManagement>
     <dependencies>
         <dependency>
             <groupId>com.amazonaws</groupId>
@@ -103,5 +132,73 @@
             </plugin>
         </plugins>
     </build>
+
+    <scm>
+        <connection>scm:git:git://github.com/MediaIQ/heimdall.git</connection>
+        <developerConnection>scm:git:git@github.com:MediaIQ/heimdall.git</developerConnection>
+        <url>https://github.com/MediaIQ/heimdall</url>
+        <tag>HEAD</tag>
+    </scm>
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>3.0.0</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>3.0.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.8</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
 
 </project>
